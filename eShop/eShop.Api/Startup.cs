@@ -1,4 +1,5 @@
-﻿using eShop.DataAccess.EntityFramework.Context;
+﻿using eShop.DataAccess.Dapper;
+using eShop.DataAccess.EntityFramework.Context;
 using eShop.DataAccess.EntityFramework.Repository;
 using eShop.Domain;
 using eShop.Domain.Repositories;
@@ -25,8 +26,16 @@ namespace eShop.Api
         {
            
             services.AddMvc();
-            services.AddDbContext<OnlineShopContext>(optionsAction=> optionsAction.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
-            services.AddTransient(typeof(IRepository<Customer>), typeof(EFCustomerRepo));
+
+            // Add DBService
+            //services.AddDbContext<OnlineShopContext>(optionsAction=> optionsAction.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
+            //services.AddTransient(typeof(IRepository<Customer>), typeof(EFCustomerRepo));
+
+            // Dapper
+            services.AddTransient(typeof(IRepository<Customer>), typeof(CustomerRepository));
+            services.AddTransient(typeof(IRepository<Product>), typeof(ProductRepository));
+            services.AddTransient(typeof(IRepository<Order>), typeof(OrderRepository));
+
             // Register the Swagger generator, defining 1 or more Swagger documents
             services.AddSwaggerGen(c =>
             {
